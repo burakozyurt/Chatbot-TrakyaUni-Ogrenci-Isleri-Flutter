@@ -1,6 +1,6 @@
-# chatbot
+# Trakya-Universitesi-Chatbot
 
-A new Flutter application.
+Trakya Universitesi Öğrenci İşleri Chatbot
 
 ## Getting Started
 
