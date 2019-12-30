@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:chatbot/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 
 class CrudMethods {
@@ -30,6 +31,21 @@ class CrudMethods {
       AuthResult result = await mAuth.signInAnonymously();
       FirebaseUser user = result.user;
       writeData(true, Constants.refUser + '/' +user.uid);
+      return user;
+    }
+  }
+
+  Future<FirebaseUser> signInAnonymouslyWithToken()async{
+    FirebaseMessaging _messaging = FirebaseMessaging();
+    String token = await _messaging.getToken();
+    bool isLogged = await isLoggedIn();
+    if(isLogged){
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      return user;
+    }else{
+      AuthResult result = await mAuth.signInAnonymously();
+      FirebaseUser user = result.user;
+      writeData(token, Constants.refUser + '/' +user.uid);
       return user;
     }
   }

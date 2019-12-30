@@ -32,6 +32,9 @@ dependencies:
   chatbar: ^0.0.7
   flutter_chat_bar: ^0.0.1
   flare_flutter: ^1.7.3
+  firebase_messaging:
+  flutter_tts: ^0.8.5
+  speech_to_text: ^0.7.0
 
 dev_dependencies:
   flutter_test:
