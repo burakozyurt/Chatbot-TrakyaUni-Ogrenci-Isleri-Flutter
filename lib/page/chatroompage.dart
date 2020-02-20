@@ -68,6 +68,12 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   _initialize() async {
     FirebaseUser user = await CrudMethods().getFirebaseUser();
     userid = user.uid;
+    DataSnapshot snapshot = await CrudMethods.myRef.child(Constants.refChatRoom + '/' + userid + '/messages').once();
+    if(snapshot.value != null){
+      CrudMethods.myRef.child(Constants.refHistory + '/' + userid + "/" + DateTime.now().millisecondsSinceEpoch.toString() + '/messages').set(snapshot.value);
+    }
+    CrudMethods.myRef.child(Constants.refChatRoom + '/' + userid + '/messages').set(null);
+    print("Silindi");
     CrudMethods.myRef
         .child(Constants.refChatRoom + '/' + userid + '/messages')
         .orderByChild('endtime')
@@ -149,13 +155,13 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
             appBar: ChatBar(
               color: Color.fromRGBO(203, 152, 50, 100),
               height: 60.0,
-              username: 'Trakya Universitesi Öğrenci İşleri',
+              username: 'Öğrenci İşleri - Sanal Asistan',
               actions: <Widget>[
                 _deleteActionItemWidget(),
               ],
               status: _chatBarState,
               profilePic:
-                  'https://www.trakya.edu.tr/admin/tools/theme/www_v2/images/logo/tr/logo.png',
+                  'https://lh3.googleusercontent.com/WKITX9L_8ZigpL4n9qpQnCBzQZmUfY-v19NsMtgTmeZN_YEuD0uSWLWR_dQCe8uLMtE',
             ),
             body: SafeArea(
               child: Container(
@@ -238,11 +244,23 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
       controller: _scrollController,
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
-      itemCount: messagesList.length,
-      itemBuilder: (BuildContext context, int index) {
-        if (messagesList[index].uid == userid) {
+      itemCount: messagesList.length + 1,
+      itemBuilder: (BuildContext context, int IndexT) {
+        if(IndexT == 0){
           return Padding(
             padding: const EdgeInsets.only(top: 8.0),
+            child: Bubble(
+              stick: true,
+              nip: BubbleNip.leftTop,
+              alignment: Alignment.centerLeft,
+              child: Text("Merhaba, size nasıl yardımcı olabilirim?"),
+            ),
+          );
+        }
+        int index = IndexT - 1;
+        if (messagesList[index].uid == userid) {
+          return Padding(
+            padding: const EdgeInsets.only(top: 5.0,bottom: 5.0),
             child: GestureDetector(
               onLongPress: () {
                 if (messagesList.length > 0 &&
@@ -269,7 +287,7 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
           );
         } else {
           return Padding(
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: const EdgeInsets.only(top: 5.0,bottom: 5.0),
             child: Bubble(
               stick: true,
               nip: BubbleNip.leftTop,

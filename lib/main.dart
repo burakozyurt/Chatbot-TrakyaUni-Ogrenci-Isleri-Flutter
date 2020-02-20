@@ -1,10 +1,12 @@
 import 'package:chatbot/page/chatroompage.dart';
 import 'package:chatbot/page/homepage.dart';
 import 'package:chatbot/services/crud.dart';
+import 'package:chatbot/utils/constants.dart';
 import 'package:chatbot/utils/loader1.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 
@@ -18,6 +20,8 @@ class _MyAppState extends State<MyApp> {
   Widget firstPage;
   FirebaseUser firebaseUser;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+
 
   @override
   void initState() {
@@ -61,6 +65,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return _router();
   }
 
